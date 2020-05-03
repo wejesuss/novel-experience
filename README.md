@@ -17,7 +17,7 @@ Exclusively for the [King Of Gods] and [Against The Gods] (Wuxiaworld without a 
 
 - You have to enable the 'Developer mode', after this click the 'load unpacked' button and choose the foolder you just have donwload yet.
 
-- Enjoy :slight_smile:
+- Enjoy ☺️
 
 [King Of Gods]: (https://wuxiaworld.online/king-of-gods/)
 [Against The Gods]: (https://www.wuxiaworld.com/novel/against-the-gods/)
