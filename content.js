@@ -1,3 +1,7 @@
+function scroll(x, y) {
+    document.documentElement.scroll({behavior: "smooth", top: y})
+}
+
 setTimeout(() => {
     const url = window.location.href
 
@@ -27,5 +31,12 @@ setTimeout(() => {
     }
 
     alert('divirta-se')
+
+    const id = setInterval(() => {
+        scroll(0, document.documentElement.scrollTop)
+        
+        document.documentElement.scrollTop += 2
+    }, 200)
+    console.log("Interval id:" + id, 'Type clearInterval(id) to stop scroll')
 
 }, 2000)
