@@ -13,7 +13,7 @@ Exclusively for the [King Of Gods](https://wuxiaworld.online/king-of-gods/) and 
     git clone https://github.com/wejesuss/novel-experience.git
     ```
 
-- Open Google Chrome, go to [extensions page](chrome://extensions/)
+- Open Google Chrome, go to extensions page - probably (chrome://extensions/)
 
 - You have to enable the 'Developer mode', after this click the 'load unpacked' button and choose the foolder you just have donwload yet.
 
