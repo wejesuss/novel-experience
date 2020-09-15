@@ -39,7 +39,9 @@ setTimeout(() => {
         
         document.documentElement.scrollTop += 2
     }, 200)
+    
     console.log("Interval id:" + id, 'Type clearInterval(id) to stop scroll')
+    setStopScroll(id)
 
 }, 2000)
 
@@ -58,6 +60,14 @@ function setNextPrevChapter() {
 
         if(e.key === "ArrowLeft") {
             location = currentNovel.replace(currentChapter, previousChapter)
+        }
+    })
+}
+
+function setStopScroll(id) {
+    window.addEventListener("keydown", (event) => {
+        if(event.key === "s") {
+            clearInterval(id)
         }
     })
 }
