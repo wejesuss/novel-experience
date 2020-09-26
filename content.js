@@ -1,7 +1,3 @@
-function scroll(x, y) {
-    document.documentElement.scroll({behavior: "smooth", top: y})
-}
-
 setTimeout(() => {
     const url = window.location.href
 
@@ -34,15 +30,12 @@ setTimeout(() => {
 
     alert('divirta-se')
 
-    const id = setInterval(() => {
-        scroll(0, document.documentElement.scrollTop)
-        
-        document.documentElement.scrollTop += 2
-    }, 200)
+    const scrollSpeed = 1
+    const id = scroll(scrollSpeed)
     
     console.log("Interval id:" + id, 'Type clearInterval(id) to stop scroll')
+    setScroll(scrollSpeed)
     setStopScroll(id)
-
 }, 2000)
 
 function setNextPrevChapter() {
@@ -60,6 +53,23 @@ function setNextPrevChapter() {
 
         if(e.key === "ArrowLeft") {
             location = currentNovel.replace(currentChapter, previousChapter)
+        }
+    })
+}
+
+function scroll(speed = 1) {
+    const id = setInterval((speed) => {
+        document.documentElement.scrollTop += speed
+    }, 100, speed)
+
+    return id
+}
+
+function setScroll(speed) {
+    window.addEventListener("keydown", (event) => {
+        if(event.key === "k") {
+            const id = scroll(speed)
+            setStopScroll(id)
         }
     })
 }
