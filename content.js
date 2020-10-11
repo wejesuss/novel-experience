@@ -36,6 +36,7 @@ setTimeout(() => {
     console.log("Interval id:" + id, 'Type clearInterval(id) to stop scroll')
     setScroll(scrollSpeed)
     setStopScroll(id)
+    setPercentageScroll()
 }, 2000)
 
 function setNextPrevChapter() {
@@ -55,6 +56,17 @@ function setNextPrevChapter() {
             location = currentNovel.replace(currentChapter, previousChapter)
         }
     })
+}
+
+function setPercentageScroll() {
+    for (let percentage = 0; percentage < 10; percentage++) {
+        window.addEventListener("keydown", (event) => {
+            const height = document.documentElement.scrollHeight;
+            if(event.key === `${percentage}`) {
+                document.documentElement.scrollTop = (percentage / 10) * height;
+            }
+        })
+    }
 }
 
 function scroll(speed = 1) {
