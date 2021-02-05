@@ -15,7 +15,7 @@ Exclusively for the [King Of Gods](https://wuxiaworld.online/king-of-gods/) and 
 
 - Open Google Chrome, go to extensions page - probably (chrome://extensions/)
 
-- You have to enable the 'Developer mode', after this click the 'load unpacked' button and choose the foolder you just have donwload yet.
+- You have to enable the 'Developer mode', after this click the 'load unpacked' button and choose the folder you just have donwload yet.
 
 - Enjoy ☺️
 
