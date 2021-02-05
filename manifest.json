@@ -1,11 +1,15 @@
 {
     "name": "novel-experience",
-    "version": "1.2",
+    "version": "1.6.0",
     "manifest_version": 2,
     "content_scripts": [
         {
-            "matches": ["https://www.wuxiaworld.com/novel/*/**", "https://wuxiaworld.online/*/**"],
-            "js": ["content.js"]
+            "matches": [
+                "*://*/*"
+            ],
+            "js": [
+                "content.js"
+            ]
         }
     ],
     "permissions": [
