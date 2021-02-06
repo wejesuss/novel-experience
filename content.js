@@ -28,11 +28,10 @@ function main() {
     const id = scrollPage(scrollSpeed);
     console.log('To stop scroll press "s" or type:', `clearInterval(${id})`);
     setStopScroll(id);
+    setScroll(scrollSpeed);
+    setPercentageScroll();
+    setNextPrevChapter(url);
   }
-
-  setScroll(scrollSpeed);
-  setPercentageScroll();
-  setNextPrevChapter(url);
 }
 
 function removeBlockingModal() {
