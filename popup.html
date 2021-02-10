@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enable/Disable Extension</title>
+
+    <style>
+      body {
+        padding: 8px 16px;
+        width: max-content;
+      }
+
+      h1 {
+        margin-bottom: 24px;
+      }
+
+      .option {
+        margin-bottom: 16px;
+      }
+
+      a {
+        text-decoration: none;
+        font-size: 16px;
+        color: #0c30de;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
+      a.enabled {
+        color: #8e0a0af5;
+      }
+
+      .option span,
+      .option label {
+        vertical-align: middle;
+      }
+
+      .option label {
+        margin-left: 8px;
+      }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+      }
+
+      input[type='checkbox'] {
+        opacity: 0;
+        height: 0;
+        width: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+      }
+
+      .slider::before {
+        content: '';
+        position: absolute;
+        width: 26px;
+        height: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        transition: 0.4s;
+      }
+
+      input:checked + .slider {
+        background-color: #2196f3;
+      }
+
+      input:focus + .slider {
+        box-shadow: 0 0 1px #2196f3;
+      }
+
+      input:checked + .slider::before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+      }
+
+      .slider.round {
+        border-radius: 34px;
+      }
+
+      .slider.round:before {
+        border-radius: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Extension Config</h1>
+
+    <div class="option">
+      <span>Enable/Disable Extension</span>
+      <label class="switch">
+        <input type="checkbox" />
+        <span class="slider round"></span>
+      </label>
+    </div>
+
+    <div class="option">
+      <a href="#" class="enabled" id="disable-url">Disable in this URL</a>
+    </div>
+
+    <div class="option">
+      <a href="#" class="enabled" id="disable-domain">Disable in this domain</a>
+    </div>
+
+    <script src="browser-script.js"></script>
+  </body>
+</html>

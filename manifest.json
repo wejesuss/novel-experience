@@ -7,6 +7,10 @@
             "matches": [
                 "*://*/*"
             ],
+            "exclude_matches": [
+                "*://*.youtube.com/*",
+                "*://*.crunchyroll.com/*"
+            ],
             "js": [
                 "content.js"
             ]
@@ -15,6 +19,16 @@
     "permissions": [
         "tabs",
         "activeTab",
-        "webNavigation"
-    ]
+        "webNavigation",
+        "storage"
+    ],
+    "background": {
+        "scripts": [
+            "background.js"
+        ]
+    },
+    "browser_action": {
+        "default_popup": "popup.html",
+        "default_title": "Teste"
+    }
 }

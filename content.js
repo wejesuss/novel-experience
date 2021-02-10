@@ -1,15 +1,43 @@
+const STORAGE_ACTIVE_IN = 'novelActiveIn';
+
+let isActive = true;
+
+chrome.storage.sync.get([STORAGE_ACTIVE_IN], function (storage) {
+  if (!storage[STORAGE_ACTIVE_IN]) {
+    const activeIn = {};
+    chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
+
+    console.log('set as ', activeIn);
+  } else {
+    console.log({ STORAGE_ACTIVE_IN: storage[STORAGE_ACTIVE_IN] });
+  }
+
+  console.log('aqui');
+});
+
+// chrome.storage.sync.clear();
+
+chrome.runtime.onMessage.addListener(function (request, _sender, sendResponse) {
+  switch (request.get) {
+    case 'hostname':
+      sendResponse({ got: location.hostname });
+      break;
+    default:
+      sendResponse({ got: '' });
+      break;
+  }
+});
+
 document.addEventListener(
   'readystatechange',
   () => {
-    if (document.readyState === 'complete') {
-      let script = document.createElement('script');
-
-      script.text = `${removeBlockingModal}\n${formatParagraphs}\n${scrollPage}\n${setScroll}\n${setStopScroll}\n${setPercentageScroll}\n${setNextPrevChapter}\n(${main})()`;
-
-      document.body.appendChild(script);
-    } else {
-      setInterval(main, 2000, false);
-    }
+    // if (document.readyState === 'complete') {
+    //   let script = document.createElement('script');
+    //   script.text = `${removeBlockingModal}\n${formatParagraphs}\n${scrollPage}\n${setScroll}\n${setStopScroll}\n${setPercentageScroll}\n${setNextPrevChapter}\n(${main})()`;
+    //   document.body.appendChild(script);
+    // } else {
+    // setTimeout(main, 2000, false);
+    // }
   },
   false
 );
@@ -28,10 +56,11 @@ function main() {
     const id = scrollPage(scrollSpeed);
     console.log('To stop scroll press "s" or type:', `clearInterval(${id})`);
     setStopScroll(id);
-    setScroll(scrollSpeed);
-    setPercentageScroll();
     setNextPrevChapter(url);
   }
+
+  setScroll(scrollSpeed);
+  setPercentageScroll();
 }
 
 function removeBlockingModal() {
