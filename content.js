@@ -15,8 +15,6 @@ chrome.storage.sync.get([STORAGE_ACTIVE_IN], function (storage) {
   console.log('aqui');
 });
 
-// chrome.storage.sync.clear();
-
 chrome.runtime.onMessage.addListener(function (request, _sender, sendResponse) {
   switch (request.get) {
     case 'hostname':
@@ -31,13 +29,13 @@ chrome.runtime.onMessage.addListener(function (request, _sender, sendResponse) {
 document.addEventListener(
   'readystatechange',
   () => {
-    // if (document.readyState === 'complete') {
-    //   let script = document.createElement('script');
-    //   script.text = `${removeBlockingModal}\n${formatParagraphs}\n${scrollPage}\n${setScroll}\n${setStopScroll}\n${setPercentageScroll}\n${setNextPrevChapter}\n(${main})()`;
-    //   document.body.appendChild(script);
-    // } else {
-    // setTimeout(main, 2000, false);
-    // }
+    if (document.readyState === 'complete') {
+      // let script = document.createElement('script');
+      // script.text = `${removeBlockingModal}\n${formatParagraphs}\n${scrollPage}\n${setScroll}\n${setStopScroll}\n${setPercentageScroll}\n${setNextPrevChapter}\n(${main})()`;
+      // document.body.appendChild(script);
+    } else {
+      // setTimeout(main, 2000, false);
+    }
   },
   false
 );
