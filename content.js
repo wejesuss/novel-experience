@@ -6,13 +6,9 @@ chrome.storage.sync.get([STORAGE_ACTIVE_IN], function (storage) {
   if (!storage[STORAGE_ACTIVE_IN]) {
     const activeIn = {};
     chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
-
-    console.log('set as ', activeIn);
   } else {
-    console.log({ STORAGE_ACTIVE_IN: storage[STORAGE_ACTIVE_IN] });
+    console.log({ [STORAGE_ACTIVE_IN]: storage[STORAGE_ACTIVE_IN] });
   }
-
-  console.log('aqui');
 });
 
 chrome.runtime.onMessage.addListener(function (request, _sender, sendResponse) {

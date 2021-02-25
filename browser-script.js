@@ -9,7 +9,7 @@ let disabledIn = {};
 let currentTab = {};
 
 chrome.storage.sync.get([STORAGE_ACTIVE_IN], function (storage) {
-  disabledIn = storage[STORAGE_ACTIVE_IN];
+  disabledIn = storage[STORAGE_ACTIVE_IN] || {};
 
   chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
     currentTab = {
@@ -37,16 +37,17 @@ function updateExtensionData() {
       const currentDomain = disabledIn[currentTab.hostname];
       if (currentDomain) {
         if (currentDomain.disabled) {
-          changeStyleOfButton(disableInURL, true, 'Enable at this URL');
-          changeStyleOfButton(disableInDomain, true, 'Enable in this domain');
+          changeStyleOfButton(disableInDomain, { removeEnabled: true }, 'Enable in this domain');
           enableDisableButton.checked = false;
         }
 
         const URLIsDisabled = currentDomain.urls.some((url) => url === currentTab.url);
         if (URLIsDisabled) {
-          changeStyleOfButton(disableInURL, true, 'Enable at this URL');
+          changeStyleOfButton(disableInURL, { removeEnabled: true }, 'Enable at this URL');
           enableDisableButton.checked = false;
         }
+
+        currentDomain.disabled ? disableInURL.classList.add('hidden') : undefined;
 
         console.log(URLIsDisabled, currentTab);
       } else {
@@ -77,11 +78,39 @@ disableInDomain.addEventListener('click', () => {
   const currentDomain = disabledIn[hostname];
   if (currentDomain) {
     if (currentDomain.disabled) {
-      changeStyleOfButton(disableInDomain, false, 'Disable in this domain');
+      changeStyleOfButton(disableInDomain, { removeEnabled: false }, 'Disable in this domain');
+      disableInURL.classList.remove('hidden');
       disabledIn[hostname].disabled = false;
     } else {
-      changeStyleOfButton(disableInDomain, true, 'Enable in this domain');
+      changeStyleOfButton(disableInDomain, { removeEnabled: true }, 'Enable in this domain');
+      disableInURL.classList.add('hidden');
       disabledIn[hostname].disabled = true;
+    }
+  } else {
+    disableInURL.classList.remove('hidden');
+
+    disabledIn[hostname] = {
+      disabled: false,
+      urls: [],
+    };
+  }
+
+  chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: disabledIn }, function () {});
+});
+
+disableInURL.addEventListener('click', () => {
+  const hostname = currentTab.hostname;
+  const currentDomain = disabledIn[hostname];
+  if (currentDomain) {
+    const index = currentDomain.urls.indexOf(currentTab.url);
+
+    if (index !== -1) {
+      currentDomain.urls[index] = currentDomain.urls[currentDomain.urls.length - 1];
+      currentDomain.urls.pop();
+      changeStyleOfButton(disableInURL, { removeEnabled: false }, 'Disable at this URL');
+    } else {
+      currentDomain.urls.push(currentTab.url);
+      changeStyleOfButton(disableInURL, { removeEnabled: true }, 'Enable at this URL');
     }
   } else {
     disabledIn[hostname] = {
@@ -93,18 +122,13 @@ disableInDomain.addEventListener('click', () => {
   chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: disabledIn }, function () {});
 });
 
-disableInURL.addEventListener('click', (e) => {
-  // verify current status
-  // verify the action requested
-  // perform the action
-  // change text and color
-});
-
 clearStorage.addEventListener('click', () => {
   chrome.storage.sync.clear();
+  window.location.reload();
 });
 
-function changeStyleOfButton(elem, removeClass, text) {
-  removeClass ? elem.classList.remove('enabled') : elem.classList.add('enabled');
+function changeStyleOfButton(elem, { removeEnabled, removeHidden = true }, text) {
+  removeEnabled ? elem.classList.remove('enabled') : elem.classList.add('enabled');
+  removeHidden ? elem.classList.remove('hidden') : elem.classList.add('hidden');
   elem.innerHTML = text;
 }
