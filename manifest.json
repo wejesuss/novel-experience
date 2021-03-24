@@ -15,20 +15,5 @@
                 "content.js"
             ]
         }
-    ],
-    "permissions": [
-        "tabs",
-        "activeTab",
-        "webNavigation",
-        "storage"
-    ],
-    "background": {
-        "scripts": [
-            "background.js"
-        ]
-    },
-    "browser_action": {
-        "default_popup": "popup.html",
-        "default_title": "Teste"
-    }
+    ]
 }
