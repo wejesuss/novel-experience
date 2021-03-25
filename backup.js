@@ -12,10 +12,10 @@ function main() {
   }
 
   if (url.includes('wuxiaworld') || url.includes('novel')) {
-    // const id = scrollPage(scrollSpeed);
-    // console.log('To stop scroll press "s" or type:', `clearInterval(${id})`);
-    // setStopScroll(id);
-    // setNextPrevChapter();
+    const id = scrollPage(scrollSpeed);
+    console.log('To stop scroll press "s" or type:', `clearInterval(${id})`);
+    setStopScroll(id);
+    setNextPrevChapter();
   }
 
   setScroll();

@@ -3,10 +3,25 @@ const STORAGE_ACTIVE_IN = 'readerActiveIn';
 let scrollSpeed = 1;
 let delay = 100;
 const intervalIds = [];
+const url = window.location.href;
 
 function main() {
   setScroll();
   setPercentageScroll();
+
+  if (url.includes('wuxiaworld') || url.includes('novel')) {
+    localStorage.visitedChapterSet = '';
+    removeBlockingModal();
+    formatParagraphs();
+    setNextPrevChapter();
+  }
+}
+
+function unsetAll() {
+  unsetPercentageScroll();
+  unsetScroll();
+  unsetStopScroll();
+  unsetNextPrevChapter();
 }
 
 function stopScroll(event) {
@@ -44,6 +59,39 @@ function addPercentageScroll(event) {
   }
 }
 
+function addNextPrevChapter(event) {
+  const currentNovel = event.view.location.pathname;
+  let previousChapterLink = currentNovel;
+  let nextChapterLink = currentNovel;
+
+  if (url.includes('novelmania')) {
+    const prev = document.querySelector('.p-prev a');
+    const next = document.querySelector('.p-next a');
+
+    if (prev) {
+      previousChapterLink = prev.href;
+    }
+
+    if (next) {
+      nextChapterLink = next.href;
+    }
+  } else {
+    const currentChapter = Number(currentNovel.split('-').pop());
+
+    nextChapterLink = currentNovel.replace(currentChapter, currentChapter + 1);
+    previousChapterLink = currentNovel.replace(
+      currentChapter,
+      currentChapter - 1 >= 0 ? currentChapter - 1 : 0
+    );
+  }
+
+  if (event.key === 'ArrowRight') {
+    location = nextChapterLink;
+  } else if (event.key === 'ArrowLeft') {
+    location = previousChapterLink;
+  }
+}
+
 function setStopScroll() {
   window.addEventListener('keydown', stopScroll);
 }
@@ -67,6 +115,43 @@ function setPercentageScroll() {
 
 function unsetPercentageScroll() {
   window.removeEventListener('keydown', addPercentageScroll);
+}
+
+function setNextPrevChapter() {
+  window.addEventListener('keydown', addNextPrevChapter);
+}
+
+function unsetNextPrevChapter() {
+  window.removeEventListener('keydown', addNextPrevChapter);
+}
+
+function removeBlockingModal() {
+  const blockingBoxes = document.querySelectorAll('.modal-backdrop, .fade.in');
+  const disabledTexts = document.querySelectorAll('.text-disabled');
+
+  if (blockingBoxes && disabledTexts) {
+    document.body.style.overflow = 'initial';
+    blockingBoxes.forEach((element) => element.remove());
+    disabledTexts.forEach((element) => element.classList.remove('text-disabled'));
+  }
+}
+
+function formatParagraphs() {
+  const contentArea =
+    document.querySelector('div.content-area') || document.querySelector('div.cha-words');
+
+  if (contentArea) {
+    const pTags = contentArea.querySelectorAll('p');
+
+    pTags.forEach((p) => {
+      const div = document.createElement('div');
+      const br = document.createElement('br');
+      const newP = p.cloneNode(true);
+
+      div.append(newP, br);
+      p.replaceWith(div);
+    });
+  }
 }
 
 main();
