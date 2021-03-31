@@ -25,25 +25,18 @@ const errorContainer = document.querySelector('.error-message');
 
 let activeIn;
 
-chrome.storage.sync.get(STORAGE_ACTIVE_IN, gotItems);
-
-// console.log({
-//   'www.wuxiaworld.com': {
-//     active: true,
-//     urls: ['https://www.wuxiaworld.com/novel/against-the-gods/atg-chapter-702'],
-//   },
-// });
+chrome.storage.sync.get([STORAGE_ACTIVE_IN], gotItems);
 
 function gotItems(items, callback) {
-  console.log(items);
-  activeIn = items;
+  activeIn = items[STORAGE_ACTIVE_IN] || {};
+  console.log(activeIn);
   if (callback && typeof callback === 'function') {
     callback();
   }
 }
 
 function updateActiveIn(callback) {
-  chrome.storage.sync.get(STORAGE_ACTIVE_IN, (items) => gotItems(items, callback));
+  chrome.storage.sync.get([STORAGE_ACTIVE_IN], (items) => gotItems(items, callback));
 }
 
 chrome.storage.onChanged.addListener(function () {
@@ -168,6 +161,27 @@ function getCurrentTabDomain() {
   });
 }
 
+function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] }, url) {
+  let removeDomain = false;
+  const index = domainPreferences.urls.indexOf(url);
+
+  if (index !== -1) {
+    if (domainPreferences.urls.length === 1) {
+      removeDomain = true;
+    }
+
+    domainPreferences.urls.splice(index, 1);
+  } else {
+    domainPreferences.urls.push(url);
+  }
+
+  if (removeDomain) {
+    return undefined;
+  } else {
+    return domainPreferences;
+  }
+}
+
 function urlButtonClicked(event) {
   let ready = false;
   let error = false;
@@ -190,15 +204,24 @@ function urlButtonClicked(event) {
     });
 
   const id = setInterval(() => {
-    console.log(foundDomain, ready, error, tab);
     if (ready || error) {
       if (foundDomain && !error) {
-        // verify if this button could be clicked
-        // get hostname and url
-        // add/remove to/from storage
-        // if removed and there is only this url, also remove the domain
-        // change button style
-        // comunicate background script
+        const url = tab.url;
+        let savedPreferences = {
+          ...{
+            active: true,
+            urls: [],
+          },
+          ...activeIn[foundDomain],
+        };
+
+        if (savedPreferences && savedPreferences.active) {
+          activeIn[foundDomain] = toggleDomainPreferences(savedPreferences, url);
+
+          chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
+          // change button style
+          // comunicate background script
+        }
       }
 
       clearInterval(id);
@@ -225,13 +248,9 @@ function domainButtonClicked(event) {
 }
 
 function storageButtonClicked(event) {
-  console.log(activeIn);
-  // verify if this button could be clicked
-  // get hostname and url
-  // add/remove to/from storage
-  // if removed and there is only this url, also remove the domain
-  // change button style
-  // comunicate background script
+  chrome.storage.sync.clear(function () {
+    console.log(activeIn);
+  });
 }
 
 function updateErrorContainer(err) {
