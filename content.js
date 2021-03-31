@@ -1,5 +1,3 @@
-const STORAGE_ACTIVE_IN = 'readerActiveIn';
-
 let scrollSpeed = 1;
 let delay = 100;
 const intervalIds = [];
