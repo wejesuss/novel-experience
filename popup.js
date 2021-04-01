@@ -24,6 +24,9 @@ const buttons = [urlButton, domainButton, storageButton];
 const errorContainer = document.querySelector('.error-message');
 
 let activeIn;
+let ready = false;
+let error = false;
+let tab = {};
 
 chrome.storage.sync.get([STORAGE_ACTIVE_IN], gotItems);
 
@@ -63,6 +66,26 @@ buttons.forEach((button, index) =>
   button.element.addEventListener('click', (e) => onClick(e, index))
 );
 
+function main() {
+  getCurrentTabDomain()
+    .then((value) => {
+      ready = value.ready;
+      error = value.error;
+      tab = {
+        ...value.tab,
+        foundDomain: value.foundDomain,
+      };
+    })
+    .catch((value) => {
+      ready = value.ready;
+      error = value.error;
+      tab = {
+        ...value.tab,
+        foundDomain: value.foundDomain,
+      };
+    });
+}
+
 function sendMessagePromise(tabId, item, successCallback, errorCallback) {
   return new Promise((resolve, reject) => {
     chrome.tabs.sendMessage(tabId, item, function (response) {
@@ -85,12 +108,11 @@ async function getDomain(tab) {
   const domains = tab.url.match(matchDomain);
 
   if (domains) {
-    foundDomain = domains[0];
     ready = true;
     return {
       ready,
       error,
-      foundDomain,
+      foundDomain: domains[0],
     };
   }
 
@@ -183,40 +205,23 @@ function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] 
 }
 
 function urlButtonClicked(event) {
-  let ready = false;
-  let error = false;
-  let foundDomain = '';
-  let tab;
   let limit = 0;
 
-  getCurrentTabDomain()
-    .then((value) => {
-      ready = value.ready;
-      error = value.error;
-      foundDomain = value.foundDomain;
-      tab = value.tab;
-    })
-    .catch((value) => {
-      ready = value.ready;
-      error = value.error;
-      foundDomain = value.foundDomain;
-      tab = value.tab;
-    });
-
   const id = setInterval(() => {
+    console.log(ready, error, tab, limit);
     if (ready || error) {
-      if (foundDomain && !error) {
+      if (tab.foundDomain && !error) {
         const url = tab.url;
         let savedPreferences = {
           ...{
             active: true,
             urls: [],
           },
-          ...activeIn[foundDomain],
+          ...activeIn[tab.foundDomain],
         };
 
         if (savedPreferences && savedPreferences.active) {
-          activeIn[foundDomain] = toggleDomainPreferences(savedPreferences, url);
+          activeIn[tab.foundDomain] = toggleDomainPreferences(savedPreferences, url);
 
           chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
           // change button style
@@ -267,3 +272,5 @@ function updateButtonStyle(button, disable) {
     button.element.innerText = button.enabledText;
   }
 }
+
+main();
