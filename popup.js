@@ -183,7 +183,27 @@ function getCurrentTabDomain() {
   });
 }
 
-function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] }, url) {
+function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] }) {
+  let removeDomain = false;
+
+  if (domainPreferences.active) {
+    domainPreferences.active = false;
+  } else {
+    if (domainPreferences.urls.length === 0) {
+      removeDomain = true;
+    }
+
+    domainPreferences.active = true;
+  }
+
+  if (removeDomain) {
+    return undefined;
+  } else {
+    return domainPreferences;
+  }
+}
+
+function toggleUrlPreferences(domainPreferences = { active: true, urls: [''] }, url) {
   let removeDomain = false;
   const index = domainPreferences.urls.indexOf(url);
 
@@ -213,15 +233,13 @@ function urlButtonClicked(event) {
       if (tab.foundDomain && !error) {
         const url = tab.url;
         let savedPreferences = {
-          ...{
-            active: true,
-            urls: [],
-          },
+          active: true,
+          urls: [],
           ...activeIn[tab.foundDomain],
         };
 
         if (savedPreferences && savedPreferences.active) {
-          activeIn[tab.foundDomain] = toggleDomainPreferences(savedPreferences, url);
+          activeIn[tab.foundDomain] = toggleUrlPreferences(savedPreferences, url);
 
           chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
           // change button style
@@ -243,13 +261,36 @@ function urlButtonClicked(event) {
 }
 
 function domainButtonClicked(event) {
-  console.log(activeIn);
-  // get hostname and url
-  // verify if this button could be clicked
-  // add/remove to/from storage
-  // if removed and there is only this url, also remove the domain
-  // change button style
-  // comunicate background script
+  let limit = 0;
+
+  const id = setInterval(() => {
+    console.log(ready, error, tab, limit);
+    if (ready || error) {
+      if (tab.foundDomain && !error) {
+        let savedPreferences = {
+          active: true,
+          urls: [],
+          ...activeIn[tab.foundDomain],
+        };
+
+        activeIn[tab.foundDomain] = toggleDomainPreferences(savedPreferences);
+        // change button style
+        // comunicate background script
+
+        chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
+      }
+
+      clearInterval(id);
+    }
+
+    if (limit >= 10) {
+      const err = '<p>Sorry, something went wrong. The limit of tries was surpassed.</p>';
+      updateErrorContainer(err);
+      clearInterval(id);
+    }
+
+    limit++;
+  }, 1000);
 }
 
 function storageButtonClicked(event) {
