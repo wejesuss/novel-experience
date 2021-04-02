@@ -5,6 +5,11 @@ class URLButton {
   element = document.getElementById('disable-url');
   enabledText = this.element.getAttribute('data-enabled');
   disabledText = this.element.getAttribute('data-disabled');
+  toggleVisibility = () => {
+    const domain = activeIn[tab.foundDomain];
+    const addOrRemove = domain ? domain.active : true;
+    this.element.classList.toggle('hidden', !addOrRemove);
+  };
 }
 
 class DomainButton {
@@ -185,9 +190,11 @@ function getCurrentTabDomain() {
 
 function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] }) {
   let removeDomain = false;
+  let disable = false;
 
   if (domainPreferences.active) {
     domainPreferences.active = false;
+    disable = true;
   } else {
     if (domainPreferences.urls.length === 0) {
       removeDomain = true;
@@ -197,14 +204,15 @@ function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] 
   }
 
   if (removeDomain) {
-    return undefined;
+    return [undefined, disable];
   } else {
-    return domainPreferences;
+    return [domainPreferences, disable];
   }
 }
 
 function toggleUrlPreferences(domainPreferences = { active: true, urls: [''] }, url) {
   let removeDomain = false;
+  let disable = false;
   const index = domainPreferences.urls.indexOf(url);
 
   if (index !== -1) {
@@ -215,12 +223,13 @@ function toggleUrlPreferences(domainPreferences = { active: true, urls: [''] }, 
     domainPreferences.urls.splice(index, 1);
   } else {
     domainPreferences.urls.push(url);
+    disable = true;
   }
 
   if (removeDomain) {
-    return undefined;
+    return [undefined, disable];
   } else {
-    return domainPreferences;
+    return [domainPreferences, disable];
   }
 }
 
@@ -239,11 +248,13 @@ function urlButtonClicked(event) {
         };
 
         if (savedPreferences && savedPreferences.active) {
-          activeIn[tab.foundDomain] = toggleUrlPreferences(savedPreferences, url);
+          const [newPreferences, disable] = toggleUrlPreferences(savedPreferences, url);
+          activeIn[tab.foundDomain] = newPreferences;
 
-          chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
-          // change button style
-          // comunicate background script
+          chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {
+            updateButtonStyle(urlButton, disable);
+            // comunicate background script
+          });
         }
       }
 
@@ -273,11 +284,14 @@ function domainButtonClicked(event) {
           ...activeIn[tab.foundDomain],
         };
 
-        activeIn[tab.foundDomain] = toggleDomainPreferences(savedPreferences);
-        // change button style
-        // comunicate background script
+        const [newPreferences, disable] = toggleDomainPreferences(savedPreferences);
+        activeIn[tab.foundDomain] = newPreferences;
 
-        chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {});
+        chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {
+          updateButtonStyle(domainButton, disable);
+          urlButton.toggleVisibility();
+          // comunicate background script
+        });
       }
 
       clearInterval(id);
