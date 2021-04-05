@@ -52,6 +52,8 @@ chrome.storage.onChanged.addListener(function () {
 });
 
 function onClick(event, triggeredBy) {
+  event.target.disabled = true;
+
   switch (triggeredBy) {
     case 0:
       updateActiveIn(() => urlButtonClicked(event));
@@ -80,6 +82,8 @@ function main() {
         ...value.tab,
         foundDomain: value.foundDomain,
       };
+
+      adjustButtonsStyle();
     })
     .catch((value) => {
       ready = value.ready;
@@ -237,7 +241,6 @@ function urlButtonClicked(event) {
   let limit = 0;
 
   const id = setInterval(() => {
-    console.log(ready, error, tab, limit);
     if (ready || error) {
       if (tab.foundDomain && !error) {
         const url = tab.url;
@@ -258,6 +261,7 @@ function urlButtonClicked(event) {
         }
       }
 
+      event.target.disabled = false;
       clearInterval(id);
     }
 
@@ -275,7 +279,6 @@ function domainButtonClicked(event) {
   let limit = 0;
 
   const id = setInterval(() => {
-    console.log(ready, error, tab, limit);
     if (ready || error) {
       if (tab.foundDomain && !error) {
         let savedPreferences = {
@@ -294,6 +297,7 @@ function domainButtonClicked(event) {
         });
       }
 
+      event.target.disabled = false;
       clearInterval(id);
     }
 
@@ -310,6 +314,7 @@ function domainButtonClicked(event) {
 function storageButtonClicked(event) {
   chrome.storage.sync.clear(function () {
     console.log(activeIn);
+    event.target.disabled = false;
   });
 }
 
@@ -325,6 +330,24 @@ function updateButtonStyle(button, disable) {
   } else {
     button.element.classList.add('enabled');
     button.element.innerText = button.enabledText;
+  }
+}
+
+function adjustButtonsStyle() {
+  const domain = {
+    active: true,
+    urls: [],
+    ...activeIn[tab.foundDomain],
+  };
+  const urlIsBlocked = domain.urls.includes(tab.url);
+
+  if (domain.active) {
+    updateButtonStyle(domainButton, false);
+    updateButtonStyle(urlButton, urlIsBlocked);
+  } else {
+    updateButtonStyle(domainButton, true);
+    updateButtonStyle(urlButton, urlIsBlocked);
+    urlButton.toggleVisibility();
   }
 }
 
