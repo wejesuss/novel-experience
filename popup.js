@@ -95,14 +95,12 @@ function main() {
     });
 }
 
-function sendMessagePromise(tabId, item, successCallback, errorCallback) {
+function sendMessagePromise(tabId, item) {
   return new Promise((resolve, reject) => {
     chrome.tabs.sendMessage(tabId, item, function (response) {
       if (!chrome.runtime.lastError) {
-        successCallback(response);
         resolve(response);
       } else {
-        errorCallback();
         reject('Something went wrong');
       }
     });
@@ -125,21 +123,17 @@ async function getDomain(tab) {
     };
   }
 
-  await sendMessagePromise(
-    tab.id,
-    { get: 'domain' },
-    (response) => {
-      foundDomain = response;
-      ready = true;
-    },
-    () => {
-      console.log(chrome.runtime.lastError);
-      const err =
-        "<p>Sorry, something went wrong with this tab, maybe this action can't be completed in this tab, reload the page and try again.</p>";
-      updateErrorContainer(err);
-      error = true;
-    }
-  );
+  try {
+    const response = await sendMessagePromise(tab.id, 'domain');
+    foundDomain = response;
+    ready = true;
+  } catch (errorMsg) {
+    console.log(chrome.runtime.lastError);
+    const err =
+      "<p>Sorry, something went wrong with this tab, maybe this action can't be completed in this tab, reload the page and try again.</p>";
+    updateErrorContainer(err);
+    error = true;
+  }
 
   return {
     ready,
