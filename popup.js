@@ -250,7 +250,7 @@ function urlButtonClicked(event) {
 
           chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {
             updateButtonStyle(urlButton, disable);
-            // comunicate background script
+            // comunicate content script
           });
         }
       }
@@ -287,7 +287,7 @@ function domainButtonClicked(event) {
         chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {
           updateButtonStyle(domainButton, disable);
           urlButton.toggleVisibility();
-          // comunicate background script
+          // comunicate content script
         });
       }
 
