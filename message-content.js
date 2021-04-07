@@ -1,6 +1,15 @@
 chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
-  if (request && request.get && request.get === 'domain') {
-    sendResponse(location.hostname);
+  if (request) {
+    switch (request) {
+      case 'domain':
+        sendResponse(location.hostname);
+        break;
+      case 'toggleExtensionState':
+        sendResponse('');
+        break;
+      default:
+        break;
+    }
   } else {
     sendResponse('');
   }
