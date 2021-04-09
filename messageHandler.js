@@ -4,10 +4,6 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
       case 'domain':
         sendResponse(location.hostname);
         break;
-      case 'toggleExtensionState':
-        toggleExtensionState(running);
-        sendResponse('');
-        break;
       default:
         break;
     }
@@ -18,6 +14,22 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
   return true;
 });
 
-function toggleExtensionState(running) {
-  running ? unsetAll() : main();
+function toggleExtensionState() {
+  const { hostname, url } = tab;
+  const domain = {
+    active: true,
+    urls: [],
+    ...activeIn[hostname],
+  };
+
+  if (domain.active) {
+    const UrlIsBlocked = domain.urls.includes(url);
+    if (UrlIsBlocked) {
+      unsetAll();
+    } else {
+      main();
+    }
+  } else {
+    unsetAll();
+  }
 }

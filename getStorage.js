@@ -11,6 +11,7 @@ chrome.storage.onChanged.addListener(updateActiveIn);
 function updateActiveIn() {
   chrome.storage.sync.get([STORAGE_ACTIVE_IN], function (items) {
     activeIn = items[STORAGE_ACTIVE_IN] || {};
+    toggleExtensionState();
   });
 }
 

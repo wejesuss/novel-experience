@@ -37,7 +37,6 @@ chrome.storage.sync.get([STORAGE_ACTIVE_IN], gotItems);
 
 function gotItems(items, callback) {
   activeIn = items[STORAGE_ACTIVE_IN] || {};
-  console.log(activeIn);
   if (callback && typeof callback === 'function') {
     callback();
   }
@@ -307,7 +306,6 @@ function domainButtonClicked(event) {
 
 function storageButtonClicked(event) {
   chrome.storage.sync.clear(function () {
-    console.log(activeIn);
     event.target.disabled = false;
   });
 }
