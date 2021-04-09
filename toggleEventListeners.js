@@ -2,8 +2,10 @@ let scrollSpeed = 1;
 let delay = 100;
 const intervalIds = [];
 const url = window.location.href;
+let running = false;
 
 function main() {
+  running = true;
   setScroll();
   setPercentageScroll();
 
@@ -16,6 +18,7 @@ function main() {
 }
 
 function unsetAll() {
+  running = false;
   unsetPercentageScroll();
   unsetScroll();
   unsetStopScroll();
@@ -151,5 +154,3 @@ function formatParagraphs() {
     });
   }
 }
-
-// main();

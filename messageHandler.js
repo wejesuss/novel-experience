@@ -5,6 +5,7 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
         sendResponse(location.hostname);
         break;
       case 'toggleExtensionState':
+        toggleExtensionState(running);
         sendResponse('');
         break;
       default:
@@ -16,3 +17,7 @@ chrome.runtime.onMessage.addListener(function (request, _, sendResponse) {
 
   return true;
 });
+
+function toggleExtensionState(running) {
+  running ? unsetAll() : main();
+}
