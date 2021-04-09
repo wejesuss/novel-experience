@@ -1,15 +1,11 @@
 {
     "name": "novel-experience",
-    "version": "2.2.6",
+    "version": "2.2.7",
     "manifest_version": 2,
     "content_scripts": [
         {
             "matches": [
                 "*://*/*"
-            ],
-            "exclude_matches": [
-                "*://*.youtube.com/*",
-                "*://*.crunchyroll.com/*"
             ],
             "js": [
                 "toggleEventListeners.js",
