@@ -1,20 +1,29 @@
 {
     "name": "novel-experience",
-    "version": "1.6.0",
+    "version": "2.2.6",
     "manifest_version": 2,
     "content_scripts": [
         {
             "matches": [
                 "*://*/*"
             ],
+            "exclude_matches": [
+                "*://*.youtube.com/*",
+                "*://*.crunchyroll.com/*"
+            ],
             "js": [
-                "content.js"
+                "toggleEventListeners.js",
+                "messageHandler.js",
+                "getStorage.js"
             ]
         }
     ],
     "permissions": [
         "tabs",
-        "activeTab",
-        "webNavigation"
-    ]
+        "storage"
+    ],
+    "browser_action": {
+        "default_title": "Reader",
+        "default_popup": "popup.html"
+    }
 }
