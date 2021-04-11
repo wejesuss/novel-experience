@@ -1,7 +1,11 @@
 {
-    "name": "novel-experience",
-    "version": "2.2.7",
+    "name": "Read Helper",
+    "version": "2.2.8",
     "manifest_version": 2,
+    "description": "Help you read with keyboard shortcuts and auto-scroll",
+    "icons": {
+        "128": "icon.png"
+    },
     "content_scripts": [
         {
             "matches": [
@@ -19,7 +23,8 @@
         "storage"
     ],
     "browser_action": {
-        "default_title": "Reader",
-        "default_popup": "popup.html"
+        "default_title": "Reader Helper",
+        "default_popup": "popup.html",
+        "default_icon": "icon.png"
     }
 }
