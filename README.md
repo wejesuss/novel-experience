@@ -72,6 +72,7 @@ Too slow?
 
 <p align="center">
   <img src="https://ik.imagekit.io/vhx2sevqtq/reader-helper/k-too-slow-shortcut_PsHVJB0b1.gif?updatedAt=1618170165758" alt="faster auto-scroll with K shortcut" width="100%">
+  <small><a href="https://ik.imagekit.io/vhx2sevqtq/reader-helper/k-too-slow-shortcut_PsHVJB0b1.gif?updatedAt=1618170165758"></a>click here if you don't see the image</small>
 </p>
 
 Want a break?
@@ -80,6 +81,7 @@ Want a break?
 
 <p align="center">
   <img src="https://ik.imagekit.io/vhx2sevqtq/reader-helper/s-shortcut_YpDMIqyy1.gif?updatedAt=1618170170863" alt="stop auto-scroll with S shortcut" width="100%">
+  <small><a href="https://ik.imagekit.io/vhx2sevqtq/reader-helper/s-shortcut_YpDMIqyy1.gif?updatedAt=1618170170863"></a>click here if you don't see the image</small>
 </p>
 
 <br/>
