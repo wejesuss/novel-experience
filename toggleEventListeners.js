@@ -1,5 +1,5 @@
 let scrollSpeed = 1;
-let delay = 100;
+let delay = 200;
 const intervalIds = [];
 const url = window.location.href;
 
@@ -125,12 +125,12 @@ function unsetNextPrevChapter() {
 
 function removeBlockingModal() {
   const blockingBoxes = document.querySelectorAll('.modal-backdrop, .fade.in');
-  const disabledTexts = document.querySelectorAll('.text-disabled');
+  const disabledTexts = document.querySelectorAll('.text-disabled,.no-select');
 
   if (blockingBoxes && disabledTexts) {
     document.body.style.overflow = 'initial';
     blockingBoxes.forEach((element) => element.remove());
-    disabledTexts.forEach((element) => element.classList.remove('text-disabled'));
+    disabledTexts.forEach((element) => element.classList.remove('text-disabled', 'no-select'));
   }
 }
 
