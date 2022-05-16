@@ -1,7 +1,7 @@
 {
     "name": "Read Helper",
-    "version": "2.3.0",
-    "manifest_version": 2,
+    "version": "2.4.0",
+    "manifest_version": 3,
     "description": "Help you read with keyboard shortcuts and auto-scroll",
     "icons": {
         "1024": "icon-1024.png"
@@ -22,7 +22,7 @@
         "tabs",
         "storage"
     ],
-    "browser_action": {
+    "action": {
         "default_title": "Reader Helper",
         "default_popup": "popup.html",
         "default_icon": "icon-1024.png"
