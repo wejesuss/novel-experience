@@ -43,7 +43,9 @@ function gotItems(items, callback) {
 }
 
 function updateActiveIn(callback) {
-  chrome.storage.sync.get([STORAGE_ACTIVE_IN], (items) => gotItems(items, callback));
+  chrome.storage.sync.get([STORAGE_ACTIVE_IN], (items) =>
+    gotItems(items, callback)
+  );
 }
 
 chrome.storage.onChanged.addListener(function () {
@@ -185,7 +187,9 @@ function getCurrentTabDomain() {
   });
 }
 
-function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] }) {
+function toggleDomainPreferences(
+  domainPreferences = { active: true, urls: [''] }
+) {
   let removeDomain = false;
   let disable = false;
 
@@ -207,7 +211,10 @@ function toggleDomainPreferences(domainPreferences = { active: true, urls: [''] 
   }
 }
 
-function toggleUrlPreferences(domainPreferences = { active: true, urls: [''] }, url) {
+function toggleUrlPreferences(
+  domainPreferences = { active: true, urls: [''] },
+  url
+) {
   let removeDomain = false;
   let disable = false;
   const index = domainPreferences.urls.indexOf(url);
@@ -244,12 +251,18 @@ function urlButtonClicked(event) {
         };
 
         if (savedPreferences && savedPreferences.active) {
-          const [newPreferences, disable] = toggleUrlPreferences(savedPreferences, url);
+          const [newPreferences, disable] = toggleUrlPreferences(
+            savedPreferences,
+            url
+          );
           activeIn[tab.foundDomain] = newPreferences;
 
-          chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {
-            updateButtonStyle(urlButton, disable);
-          });
+          chrome.storage.sync.set(
+            { [STORAGE_ACTIVE_IN]: activeIn },
+            function () {
+              updateButtonStyle(urlButton, disable);
+            }
+          );
         }
       }
 
@@ -258,7 +271,8 @@ function urlButtonClicked(event) {
     }
 
     if (limit >= 10) {
-      const err = '<p>Sorry, something went wrong. The limit of tries was surpassed.</p>';
+      const err =
+        '<p>Sorry, something went wrong. The limit of tries was surpassed.</p>';
       updateErrorContainer(err);
       clearInterval(id);
     }
@@ -279,7 +293,8 @@ function domainButtonClicked(event) {
           ...activeIn[tab.foundDomain],
         };
 
-        const [newPreferences, disable] = toggleDomainPreferences(savedPreferences);
+        const [newPreferences, disable] =
+          toggleDomainPreferences(savedPreferences);
         activeIn[tab.foundDomain] = newPreferences;
 
         chrome.storage.sync.set({ [STORAGE_ACTIVE_IN]: activeIn }, function () {
@@ -293,7 +308,8 @@ function domainButtonClicked(event) {
     }
 
     if (limit >= 10) {
-      const err = '<p>Sorry, something went wrong. The limit of tries was surpassed.</p>';
+      const err =
+        '<p>Sorry, something went wrong. The limit of tries was surpassed.</p>';
       updateErrorContainer(err);
       clearInterval(id);
     }

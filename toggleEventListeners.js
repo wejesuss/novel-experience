@@ -9,6 +9,7 @@ function main() {
 
   if (url.includes('wuxiaworld') || url.includes('novel')) {
     localStorage.visitedChapterSet = '';
+    localStorage.removeItem('anon-chapters-read');
     removeBlockingModal();
     formatParagraphs();
     setNextPrevChapter();
@@ -127,16 +128,19 @@ function removeBlockingModal() {
   const blockingBoxes = document.querySelectorAll('.modal-backdrop, .fade.in');
   const disabledTexts = document.querySelectorAll('.text-disabled,.no-select');
 
-  if (blockingBoxes && disabledTexts) {
+  if (blockingBoxes.length && disabledTexts.length) {
     document.body.style.overflow = 'initial';
     blockingBoxes.forEach((element) => element.remove());
-    disabledTexts.forEach((element) => element.classList.remove('text-disabled', 'no-select'));
+    disabledTexts.forEach((element) =>
+      element.classList.remove('text-disabled', 'no-select')
+    );
   }
 }
 
 function formatParagraphs() {
   const contentArea =
-    document.querySelector('div.content-area') || document.querySelector('div.cha-words');
+    document.querySelector('div.content-area') ||
+    document.querySelector('div.cha-words');
 
   if (contentArea) {
     const pTags = contentArea.querySelectorAll('p');
