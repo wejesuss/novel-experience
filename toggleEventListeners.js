@@ -109,27 +109,28 @@ function addPercentageScroll(event) {
   }
 }
 
-function getNextPrevChapter(prevSelector, nextSelector) {
-  let previousChapterLink = '';
-  let nextChapterLink = '';
+function getNextPrevChapter(prevSelector, nextSelector, currentChapter) {
+  let previousChapterLink = currentChapter;
+  let nextChapterLink = currentChapter;
   const prev = document.querySelector(`${prevSelector}`);
   const next = document.querySelector(`${nextSelector}`);
 
-  if (prev && next) {
+  if (prev) {
     previousChapterLink = prev.href;
-    nextChapterLink = next.href;
-
-    return [previousChapterLink, nextChapterLink];
   }
 
-  return [];
+  if (next) {
+    nextChapterLink = next.href;
+  }
+
+  return [previousChapterLink, nextChapterLink];
 }
 
 function addNextPrevChapter(event) {
   const pathname = location.pathname.split('-');
   const currentChapter = Number(pathname.pop());
-  const previousChapter = currentChapter + 1;
-  const nextChapter = currentChapter - 1;
+  const previousChapter = currentChapter - 1;
+  const nextChapter = currentChapter + 1;
 
   const previousChapterLink = pathname.concat(previousChapter).join('-');
   const nextChapterLink = pathname.concat(nextChapter).join('-');
