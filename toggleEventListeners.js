@@ -48,7 +48,7 @@ const unblockNovels = {
       );
     },
     main: () => {
-      const that = unblockNovels.wuxiaworld;
+      const that = unblockNovels.novelmania;
       that.removeBlockingModal();
       that.setNextPrevChapter();
     },
