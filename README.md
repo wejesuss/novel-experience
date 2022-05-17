@@ -71,7 +71,9 @@ Too slow?
 **The more you press** `K` the faster it scrolls
 
 <p align="center">
-  <img src="https://ik.imagekit.io/vhx2sevqtq/reader-helper/k-too-slow-shortcut_PsHVJB0b1.gif" alt="faster auto-scroll with K shortcut" width="100%">
+  <img src="https://ik.imagekit.io/vhx2sevqtq/reader-helper/k-too-slow-shortcut_PsHVJB0b1.gif?updatedAt=1618170165758" alt="faster auto-scroll with K shortcut" width="100%">
+  <br/>
+  <small><a href="https://ik.imagekit.io/vhx2sevqtq/reader-helper/k-too-slow-shortcut_PsHVJB0b1.gif?updatedAt=1618170165758">click here if you don't see the image</a></small>
 </p>
 
 Want a break?
@@ -79,7 +81,9 @@ Want a break?
 **Press** `S` to stop scrolling
 
 <p align="center">
-  <img src="https://ik.imagekit.io/vhx2sevqtq/reader-helper/s-shortcut_YpDMIqyy1.gif" alt="stop auto-scroll with S shortcut" width="100%">
+  <img src="https://ik.imagekit.io/vhx2sevqtq/reader-helper/s-shortcut_YpDMIqyy1.gif?updatedAt=1618170170863" alt="stop auto-scroll with S shortcut" width="100%">
+  <br/>
+  <small><a href="https://ik.imagekit.io/vhx2sevqtq/reader-helper/s-shortcut_YpDMIqyy1.gif?updatedAt=1618170170863">click here if you don't see the image</a></small>
 </p>
 
 <br/>
