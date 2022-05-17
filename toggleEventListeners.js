@@ -21,13 +21,14 @@ const unblockNovels = {
   },
   novelmania: {
     removeBlockingModal: removeBlockingModal,
-    getNextPrevChapter: (event) => {
-      const currentChapter = event.location.href;
+    getNextPrevChapter: function (event) {
+      const currentChapter = event.view.location.href;
 
-      const [
-        previousChapterLink = currentChapter,
-        nextChapterLink = currentChapter,
-      ] = getNextPrevChapter('.p-prev a', '.p-next a');
+      const [previousChapterLink, nextChapterLink] = getNextPrevChapter(
+        '.p-prev a',
+        '.p-next a',
+        currentChapter
+      );
 
       if (event.key === 'ArrowRight') {
         location = nextChapterLink;
