@@ -1,19 +1,70 @@
 let scrollSpeed = 1;
 let delay = 200;
 const intervalIds = [];
-const url = window.location.href;
+
+const unblockNovels = {
+  wuxiaworld: {
+    removeBlockingModal: removeBlockingModal,
+    setNextPrevChapter: () => {
+      window.addEventListener('keydown', addNextPrevChapter);
+    },
+    unsetNextPrevChapter: () => {
+      window.removeEventListener('keydown', addNextPrevChapter);
+    },
+    main: () => {
+      const that = unblockNovels.wuxiaworld;
+      localStorage.visitedChapterSet = '';
+      localStorage.removeItem('anon-chapters-read');
+      that.removeBlockingModal();
+      that.setNextPrevChapter();
+    },
+  },
+  novelmania: {
+    removeBlockingModal: removeBlockingModal,
+    getNextPrevChapter: (event) => {
+      const currentChapter = event.location.href;
+
+      const [
+        previousChapterLink = currentChapter,
+        nextChapterLink = currentChapter,
+      ] = getNextPrevChapter('.p-prev a', '.p-next a');
+
+      if (event.key === 'ArrowRight') {
+        location = nextChapterLink;
+      } else if (event.key === 'ArrowLeft') {
+        location = previousChapterLink;
+      }
+    },
+    setNextPrevChapter: () => {
+      window.addEventListener(
+        'keydown',
+        unblockNovels.novelmania.getNextPrevChapter
+      );
+    },
+    unsetNextPrevChapter: () => {
+      window.removeEventListener(
+        'keydown',
+        unblockNovels.novelmania.getNextPrevChapter
+      );
+    },
+    main: () => {
+      const that = unblockNovels.wuxiaworld;
+      that.removeBlockingModal();
+      that.setNextPrevChapter();
+    },
+  },
+};
 
 function main() {
+  const url = window.location.href;
   setScroll();
   setPercentageScroll();
 
-  if (url.includes('wuxiaworld') || url.includes('novel')) {
-    localStorage.visitedChapterSet = '';
-    localStorage.removeItem('anon-chapters-read');
-    removeBlockingModal();
-    formatParagraphs();
-    setNextPrevChapter();
-  }
+  Object.entries(unblockNovels).forEach(([domain, website]) => {
+    if (url.includes(domain)) {
+      website.main();
+    }
+  });
 }
 
 function unsetAll() {
@@ -58,70 +109,36 @@ function addPercentageScroll(event) {
   }
 }
 
-function addNextPrevChapter(event) {
-  const currentNovel = event.view.location.pathname;
-  let previousChapterLink = currentNovel;
-  let nextChapterLink = currentNovel;
+function getNextPrevChapter(prevSelector, nextSelector) {
+  let previousChapterLink = '';
+  let nextChapterLink = '';
+  const prev = document.querySelector(`${prevSelector}`);
+  const next = document.querySelector(`${nextSelector}`);
 
-  if (url.includes('novelmania')) {
-    const prev = document.querySelector('.p-prev a');
-    const next = document.querySelector('.p-next a');
+  if (prev && next) {
+    previousChapterLink = prev.href;
+    nextChapterLink = next.href;
 
-    if (prev) {
-      previousChapterLink = prev.href;
-    }
-
-    if (next) {
-      nextChapterLink = next.href;
-    }
-  } else {
-    const currentChapter = Number(currentNovel.split('-').pop());
-
-    nextChapterLink = currentNovel.replace(currentChapter, currentChapter + 1);
-    previousChapterLink = currentNovel.replace(
-      currentChapter,
-      currentChapter - 1 >= 0 ? currentChapter - 1 : 0
-    );
+    return [previousChapterLink, nextChapterLink];
   }
+
+  return [];
+}
+
+function addNextPrevChapter(event) {
+  const pathname = location.pathname.split('-');
+  const currentChapter = Number(pathname.pop());
+  const previousChapter = currentChapter + 1;
+  const nextChapter = currentChapter - 1;
+
+  const previousChapterLink = pathname.concat(previousChapter).join('-');
+  const nextChapterLink = pathname.concat(nextChapter).join('-');
 
   if (event.key === 'ArrowRight') {
     location = nextChapterLink;
   } else if (event.key === 'ArrowLeft') {
     location = previousChapterLink;
   }
-}
-
-function setStopScroll() {
-  window.addEventListener('keydown', stopScroll);
-}
-
-function unsetStopScroll() {
-  stopScroll({ key: 's' });
-  window.removeEventListener('keydown', stopScroll);
-}
-
-function setScroll() {
-  window.addEventListener('keydown', scrollWithKey);
-}
-
-function unsetScroll() {
-  window.removeEventListener('keydown', scrollWithKey);
-}
-
-function setPercentageScroll() {
-  window.addEventListener('keydown', addPercentageScroll);
-}
-
-function unsetPercentageScroll() {
-  window.removeEventListener('keydown', addPercentageScroll);
-}
-
-function setNextPrevChapter() {
-  window.addEventListener('keydown', addNextPrevChapter);
-}
-
-function unsetNextPrevChapter() {
-  window.removeEventListener('keydown', addNextPrevChapter);
 }
 
 function removeBlockingModal() {
@@ -154,4 +171,35 @@ function formatParagraphs() {
       p.replaceWith(div);
     });
   }
+}
+
+function setStopScroll() {
+  window.addEventListener('keydown', stopScroll);
+}
+
+function unsetStopScroll() {
+  stopScroll({ key: 's' });
+  window.removeEventListener('keydown', stopScroll);
+}
+
+function setScroll() {
+  window.addEventListener('keydown', scrollWithKey);
+}
+
+function unsetScroll() {
+  window.removeEventListener('keydown', scrollWithKey);
+}
+
+function setPercentageScroll() {
+  window.addEventListener('keydown', addPercentageScroll);
+}
+
+function unsetPercentageScroll() {
+  window.removeEventListener('keydown', addPercentageScroll);
+}
+
+function unsetNextPrevChapter() {
+  Object.values(unblockNovels).forEach((website) => {
+    website.unsetNextPrevChapter();
+  });
 }
